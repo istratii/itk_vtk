@@ -1,0 +1,30 @@
+name: Lint Python Code
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code 
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Dependencies
+        run: pip install black flake8 isort
+      - name: Lint Code
+        run: |
+          isort src/
+          black src/
+          flake8 --config .flake8 src/
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Commit linter changes"
