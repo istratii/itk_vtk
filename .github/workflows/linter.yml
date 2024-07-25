@@ -22,9 +22,9 @@ jobs:
         run: pip install black flake8 isort
       - name: Lint Code
         run: |
-          isort src/
-          black src/
-          flake8 --config .flake8 src/
+          isort .
+          black .
+          flake8 --config .flake8 .
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Commit linter changes"
