@@ -122,14 +122,14 @@ def _binary_closing(image, radius=1):
 
 def step3_images_segmentation(image_fixed, image_output):
     image_fixed_segmented = _segment_tumor(
-        image_fixed, [(100, 75, 70), (150, 80, 100)], 0.23
+        image_fixed, [(120, 65, 84), (99, 77, 84)], 0.23
     )
     image_fixed_segmented = itk.image_from_array(
         itk.array_from_image(image_fixed_segmented).astype(np.uint8)
     )
     image_fixed_segmented = _binary_closing(image_fixed_segmented)
     image_output_segmented = _segment_tumor(
-        image_output, [(100, 75, 70), (145, 80, 100)], 0.1675
+        image_output, [(120, 65, 80), (99, 77, 80)], 0.23
     )
     image_output_segmented = itk.image_from_array(
         itk.array_from_image(image_output_segmented).astype(np.uint8)
