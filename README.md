@@ -51,13 +51,20 @@ Pour optimiser le recalage, les paramètres suivants ont été utilisés :
 
 Pour détecter les tumeurs dans les images IRM, la segmentation a été effectuée en utilisant une approche de seuil connecté basée sur des points de départ spécifiques dans l'image. Les étapes incluent:
 
-1. Segmentation Initiale:
+1. **Segmentation Initiale**:
 
-   - Des points de départ spécifiques sont utilisés pour segmenter les régions d'intérêt en utilisant une méthode de seuil connecté.
+   - **Méthode**: Nous avons utilisé la méthode de seuil connecté en partant de points de départ (seed points) spécifiques dans l'image. Cette méthode permet de segmenter des régions d'intérêt basées sur l'intensité des voxels autour des points de départ.
+   - **Justification**: Cette méthode a été choisie pour sa simplicité et son efficacité à segmenter les régions homogènes des tumeurs à partir de points de départ connus. Les seuils d'intensité ont été ajustés (empiriquement) pour capturer précisément les régions tumorales.
 
-2. Fermeture Morphologique Binaire:
+2. **Fermeture Morphologique Binaire**:
 
-   - Après la segmentation initiale, une opération de fermeture morphologique est appliquée pour éliminer les petits trous et améliorer la qualité des contours segmentés.
+   - **Méthode**: Après la segmentation initiale, une opération de fermeture morphologique est appliquée pour éliminer les petits trous et améliorer la qualité des contours segmentés.
+   - **Justification**: La fermeture morphologique aide à affiner les bords des tumeurs segmentées en comblant les petits trous et en supprimant les artefacts, ce qui améliore la précision globale de la segmentation.
+
+3. **Exploration et Optimisation**:
+
+   - **Travail Exploratoire**: Nous avons testé plusieurs points de départ et plages de seuils pour optimiser la segmentation. Des itérations ont été effectuées pour ajuster les paramètres afin d'obtenir les meilleurs résultats possibles.
+   - **Résultats**: La segmentation résultante a montré une détection précise des tumeurs dans les images fixes et alignées, avec une amélioration notable après l'application de la fermeture morphologique.
 
 Cette approche a permis de produire des cartes binaires représentant les régions des tumeurs dans les images de référence et les images alignées.
 
@@ -65,17 +72,24 @@ Cette approche a permis de produire des cartes binaires représentant les régio
 
 Pour analyser les changements entre les deux images segmentées et visualiser les différences, la méthode suivante a été utilisée :
 
-1. Calcul de la Différence:
+1. **Calcul de la Différence**:
 
-   - La différence entre les deux images segmentées est calculée voxel par voxel. Cette opération génère une carte de différence qui met en évidence les variations entre les images au niveau des tumeurs.
+   - **Méthode**: La différence entre les deux images segmentées est calculée voxel par voxel. Cette opération génère une carte de différence qui met en évidence les variations entre les images au niveau des tumeurs.
+   - **Justification**: Calculer la différence voxel par voxel permet de quantifier les changements dans la taille et l'intensité des tumeurs entre les deux images, fournissant une base solide pour l'analyse visuelle.
 
-2. Visualisation en 3D:
+2. **Visualisation en 3D**:
 
-   - La carte de différence est convertie en une image VTK, qui est ensuite visualisée en 3D à l'aide de la bibliothèque VTK. Les volumes sont rendus avec des fonctions de transfert de couleur et d'opacité pour mettre en évidence les différences entre les images.
-   - Représentation des Couleurs:
-     - Rouge: Représente les zones où la tumeur a augmenté en taille ou en intensité entre les deux images. Cela indique une croissance ou un développement dans ces régions.
-     - Vert: Représente les zones où la tumeur a diminué en taille ou en intensité entre les deux images. Cela indique une réduction ou une régression dans ces régions.
-     - Noir (ou Transparent): Pas de changement
+   - **Méthode**: La carte de différence est convertie en une image VTK, qui est ensuite visualisée en 3D à l'aide de la bibliothèque VTK. Les volumes sont rendus avec des fonctions de transfert de couleur et d'opacité pour mettre en évidence les différences entre les images.
+   - **Représentation des Couleurs**:
+     - **Rouge**: Représente les zones où la tumeur a augmenté en taille ou en intensité entre les deux images. Cela indique une croissance ou un développement dans ces régions.
+     - **Vert**: Représente les zones où la tumeur a diminué en taille ou en intensité entre les deux images. Cela indique une réduction ou une régression dans ces régions.
+     - **Noir (ou Transparent)**: Pas de changement.
+
+3. **Interactions et Analyse Quantitative**:
+
+   - **Utilisation des Transfer Functions**: Des fonctions de transfert de couleur et d'opacité ont été utilisées pour mieux visualiser les changements. Les différentes couleurs et niveaux d'opacité aident à distinguer clairement les zones de croissance et de régression des tumeurs.
+   - **Interactivité**: La visualisation 3D permet une interaction en temps réel, permettant à l'utilisateur de tourner, zoomer et explorer les différences de manière intuitive.
+   - **Analyse Quantitative**: La carte de différence fournit également une base pour une analyse quantitative des changements, permettant de mesurer précisément l'évolution des tumeurs.
 
 Cela permet de voir clairement l'évolution des tumeurs au fil du temps et d'effectuer une analyse visuelle des changements.
 
